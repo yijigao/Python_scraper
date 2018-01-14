@@ -1,6 +1,5 @@
 import requests
 from bs4 import BeautifulSoup
-import pprint
 
 
 ## 获取html网页
@@ -35,7 +34,11 @@ def get_content(url):
         try:
             content['rank'] = tag.find("em", class_="").text.strip()
             content['title'] = tag.find("span", class_="title").text.strip()
-            content['director'] = tag.find("p", class_="").text.strip()
+            content['director'] = tag.find("p", class_="").text.strip().split(" ")[0]
+            content['starring'] = tag.find("p", class_="").text.strip().split(" ")[1]
+            content['time'] = tag.find("p", class_="").text.strip().split(" ")[2]
+            content['country'] = tag.find("p", class_="").text.strip().split(" ")[3]
+            content['genre'] = tag.find("p", class_="").text.strip().split(" ")[4]
             content['star'] = tag.find('span', class_="rating_num").text.strip()
             content['quote'] = tag.find('span', class_="inq").text.strip()
             contents.append(content)
@@ -47,8 +50,16 @@ def get_content(url):
 def out2txt(dict):
     with open('douban250.txt', 'a+', encoding='utf-8') as f:
         for content in dict:
-            f.write("排名:{} \t 标题:{} \t 导演:{} \t 评价:{} \t 简介:{} \n"
-                    .format(content['rank'], content['title'], content['director'], content['star'], content['quote']))
+            f.write(content['rank'] + " "
+                    + content['title'] + " "
+                    + content['director'] + " "
+                    + content['starring'] + " "
+                    + content['time'] + " "
+                    + content['country'] + " "
+                    + content['genre'] + " "
+                    + content['star'] + " "
+                    + content['quote'] + " "
+                    + "\n")
         f.close()
 
 
