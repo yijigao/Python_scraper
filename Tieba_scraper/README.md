@@ -1,16 +1,20 @@
 # 使用BeautifulSoup 爬取贴吧页面主题信息
 
 ## 1. 目标
+
 爬取wp7吧目前页面的主题信息，将标题、发帖人、日期、回复数量、链接保存文本
 
 ## 2. 步骤
+
 1. 分析地址
+
 * 贴吧地址：http://tieba.baidu.com/f?kw=wp7&ie=utf-8&pn=0#
 * 页面采用utf-8编码
 * 每次翻页地址后面的“pn”加50
 
 2. 使用浏览器开发者模式分析html
-* 每个帖子内容包裹在"<li class=" j_thread_list clearfix"> "
+
+* 每个帖子内容包裹在"<li class=" j_thread_list clearfix"> "中
 * 关注上面的信息，找到需要信息所在的class
 
 ## 3. 有哪些坑？
