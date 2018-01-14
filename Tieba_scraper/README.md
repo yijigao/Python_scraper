@@ -10,7 +10,7 @@
 * 每次翻页地址后面的“pn”加50
 
 2. 使用浏览器开发者模式分析html
-* 每个帖子内容包裹在<li class=" j_thread_list clearfix">
+* 每个帖子内容包裹在"<li class=" j_thread_list clearfix"> "
 * 关注上面的信息，找到需要信息所在的class
 
 ## 3. 有哪些坑？
