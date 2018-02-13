@@ -1,6 +1,9 @@
+# -*- coding:utf8 -*-
 import csv
 import uuid
 import requests
+import codecs
+import time
 
 
 def get_uuid():
@@ -19,12 +22,12 @@ def get_lagou(page):
 
     payload = "first=false&pn=" + str(page) + "&kd=%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"
     cookie = "JSESSIONID=" + get_uuid() + ";" \
-            "user_trace_token=" + get_uuid() + "; LGUID=" \
+                                          "user_trace_token=" + get_uuid() + "; LGUID=" \
              + get_uuid() + "; index_location_city=%E6%88%90%E9%83%BD; " \
-            "SEARCH_ID=" + get_uuid() + '; _gid=GA1.2.717841549.1514043316; ' \
-             '_ga=GA1.2.952298646.1514043316; ' \
-             'LGSID=' + get_uuid() + "; " \
-            "LGRID=" + get_uuid() + "; "
+                            "SEARCH_ID=" + get_uuid() + '; _gid=GA1.2.717841549.1514043316; ' \
+                                                        '_ga=GA1.2.952298646.1514043316; ' \
+                                                        'LGSID=' + get_uuid() + "; " \
+                                                                                "LGRID=" + get_uuid() + "; "
 
     headers = {
         'cookie': cookie,
@@ -42,35 +45,64 @@ def get_lagou(page):
         'cache-control': "no-cache",
         'postman-token': "91beb456-8dd9-0390-a3a5-64ff3936fa63"
     }
-    return requests.request("POST", url, data=payload, headers=headers, params=querystring).json()
+    return requests.request("POST", url, data=payload, headers=headers, params=querystring).json(encoding='utf-8')
 
 
 def parse_url():
     contents = []
-    for i in range(1, 30):
-        content_json = get_lagou(i)['content']['positionResult']['result']
-        for com in content_json:
-            item = {'city': com['city'], 'companyFullName': com['companyFullName'],
-                    'companyLabelList': com['companyLabelList'], 'companySize': com['companySize'],
-                    'education': com['education'], 'financeStage': com['financeStage'], 'firstType': com['firstType'],
-                    'industryField': com['industryField'], 'jobNature': com['jobNature'], 'latitude': com['latitude'],
-                    'longitude': com['longitude'], 'positionAdvantage': com['positionAdvantage'],
-                    'positionId': com['positionId'], 'positionLables': com['positionLables'],
-                    'positionName': com['positionName'], 'salary': com['salary'], 'workYear': com['workYear']}
-            contents.append(item)
+    pageCount = get_lagou(1)['content']['positionResult']['totalCount'] // 15
+    for i in range(1, pageCount + 1):
+        try:
+            print("开始爬取第{}页".format(i))
+            if i % 30 == 0:
+                time.sleep(30)  # 每爬30页休息30秒
+            content_json = get_lagou(i)['content']['positionResult']['result']
+            for com in content_json:
+                item = {'city': com['city'], 'companyFullName': com['companyFullName'],
+                        'companyLabelList': com['companyLabelList'], 'companySize': com['companySize'],
+                        'education': com['education'], 'financeStage': com['financeStage'],
+                        'firstType': com['firstType'],
+                        'industryField': com['industryField'], 'jobNature': com['jobNature'],
+                        'latitude': com['latitude'],
+                        'longitude': com['longitude'], 'positionAdvantage': com['positionAdvantage'],
+                        'positionId': com['positionId'], 'positionLables': com['positionLables'],
+                        'positionName': com['positionName'], 'salary': com['salary'], 'workYear': com['workYear']}
+                contents.append(item)
+            print("第{}页爬取完成！".format(i))
+        except:
+            print("Something happend!")
+
     return contents
+
+
+class UnicodeDictWriter(csv.DictWriter, object):
+    """Extend csv.DictWriter to handle Unicode input"""
+
+    def writerow(self, row):
+        super(UnicodeDictWriter, self).writerow({
+            k: (v if isinstance(v, bytes) else v) for k, v in row.items()
+        })
+
+    def writerows(self, rows):
+        for row in rows:
+            self.writerow(row)
 
 
 def parse_to_csv(contents):
     # head = ['city', 'companyFullName', 'companyLabelList', 'companySize', 'education', 'financeStage',
     #         'firstType', 'industryField', 'jobNature', 'latitude', 'longitude', 'positionAdvantage',
     #         'positionId', 'positionLables', 'positionName', 'salary', 'workYear']
+    print("正在写入csv......")
     keys = contents[0].keys()
-    with open('CONTENTS.csv', 'w') as f:
-        dict_writer = csv.DictWriter(f, keys)
+    with codecs.open('lagou.csv', 'w', encoding="utf8") as f:
+        dict_writer = UnicodeDictWriter(f, keys)
         dict_writer.writeheader()
         dict_writer.writerows(contents)
+    f.close()
+    print("csv 写入完成！")
 
 
 if __name__ == "__main__":
     parse_to_csv(parse_url())
+    # pageCout = get_lagou(1)['content']['positionResult']['totalCount'] // 15
+    # print(pageCout)

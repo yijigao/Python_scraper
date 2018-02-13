@@ -4,9 +4,10 @@
     <bookmark url="file://$PROJECT_DIR$/Scrapy/first_scrapy.py" line="62" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="44208505-f608-44e7-9c57-e7dd746fa06d" name="Default" comment="">
+    <list default="true" id="44208505-f608-44e7-9c57-e7dd746fa06d" name="Default" comment="&quot;README&quot;">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/lagou/README.md" afterPath="$PROJECT_DIR$/lagou/README.md" />
+      <change beforePath="$PROJECT_DIR$/lagou/lagou.py" afterPath="$PROJECT_DIR$/lagou/lagou.py" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
@@ -17,7 +18,7 @@
   </component>
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/Python_crawler$zimuku.coverage" NAME="zimuku Coverage Results" MODIFIED="1516111685922" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Scrapy" />
-    <SUITE FILE_PATH="coverage/Python_scraper$lagou.coverage" NAME="lagou Coverage Results" MODIFIED="1518499743919" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/lagou" />
+    <SUITE FILE_PATH="coverage/Python_scraper$lagou.coverage" NAME="lagou Coverage Results" MODIFIED="1518526322188" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/lagou" />
     <SUITE FILE_PATH="coverage/Python_crawler$text_sql.coverage" NAME="text_sql Coverage Results" MODIFIED="1516201529225" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Scrapy" />
     <SUITE FILE_PATH="coverage/Python_crawler$douban_movie_250.coverage" NAME="douban_movie_250 Coverage Results" MODIFIED="1515943466300" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Douban_movie_top250" />
     <SUITE FILE_PATH="coverage/Python_crawler$first_scrapy.coverage" NAME="first_scrapy Coverage Results" MODIFIED="1516203429765" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/Scrapy" />
@@ -47,10 +48,10 @@
       <file leaf-file-name="lagou.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/lagou/lagou.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="477">
-              <caret line="73" column="0" lean-forward="true" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+            <state relative-caret-position="513">
+              <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="99" selection-end-column="39" />
               <folding>
-                <element signature="e#0#10#0" expanded="true" />
+                <element signature="e#22#32#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -128,7 +129,6 @@
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -145,6 +145,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -340,7 +341,14 @@
       <option name="project" value="LOCAL" />
       <updated>1518503355102</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="&quot;README&quot;">
+      <created>1518504991627</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1518504991627</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TodoView">
@@ -394,7 +402,8 @@
     <MESSAGE value="Scrapy 爬取天气信息" />
     <MESSAGE value="&quot;设计&quot;" />
     <MESSAGE value="&quot;crawled lagou&quot;" />
-    <option name="LAST_COMMIT_MESSAGE" value="&quot;crawled lagou&quot;" />
+    <MESSAGE value="&quot;README&quot;" />
+    <option name="LAST_COMMIT_MESSAGE" value="&quot;README&quot;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -403,13 +412,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/Scrapy/text_sql.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="240">
-          <caret line="8" column="8" lean-forward="false" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/Scrapy/weather/weather/items.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="240">
@@ -720,12 +722,23 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/lagou/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="0">
+            <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <folding />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/lagou/lagou.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="477">
-          <caret line="73" column="0" lean-forward="true" selection-start-line="73" selection-start-column="0" selection-end-line="73" selection-end-column="0" />
+        <state relative-caret-position="513">
+          <caret line="96" column="0" lean-forward="false" selection-start-line="96" selection-start-column="0" selection-end-line="99" selection-end-column="39" />
           <folding>
-            <element signature="e#0#10#0" expanded="true" />
+            <element signature="e#22#32#0" expanded="true" />
           </folding>
         </state>
       </provider>
