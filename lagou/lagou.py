@@ -1,6 +1,5 @@
+import csv
 import uuid
-from pprint import pprint
-import json
 import requests
 
 
@@ -13,18 +12,20 @@ def get_lagou(page):
 
     querystring = {
         "px": "new",
-        "city": "成都",
+        "city": "全国",
         "needAdditionalResult": "false",
         "isSchoolJob": "0"
     }
 
     payload = "first=false&pn=" + str(page) + "&kd=%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90"
     cookie = "JSESSIONID=" + get_uuid() + ";" \
-                                          "user_trace_token=" + get_uuid() + "; LGUID=" + get_uuid() + "; index_location_city=%E6%88%90%E9%83%BD; " \
-                                                                                                       "SEARCH_ID=" + get_uuid() + '; _gid=GA1.2.717841549.1514043316; ' \
-                                                                                                                                   '_ga=GA1.2.952298646.1514043316; ' \
-                                                                                                                                   'LGSID=' + get_uuid() + "; " \
-                                                                                                                                                           "LGRID=" + get_uuid() + "; "
+            "user_trace_token=" + get_uuid() + "; LGUID=" \
+             + get_uuid() + "; index_location_city=%E6%88%90%E9%83%BD; " \
+            "SEARCH_ID=" + get_uuid() + '; _gid=GA1.2.717841549.1514043316; ' \
+             '_ga=GA1.2.952298646.1514043316; ' \
+             'LGSID=' + get_uuid() + "; " \
+            "LGRID=" + get_uuid() + "; "
+
     headers = {
         'cookie': cookie,
         'origin': "https://www.lagou.com",
@@ -44,10 +45,32 @@ def get_lagou(page):
     return requests.request("POST", url, data=payload, headers=headers, params=querystring).json()
 
 
+def parse_url():
+    contents = []
+    for i in range(1, 30):
+        content_json = get_lagou(i)['content']['positionResult']['result']
+        for com in content_json:
+            item = {'city': com['city'], 'companyFullName': com['companyFullName'],
+                    'companyLabelList': com['companyLabelList'], 'companySize': com['companySize'],
+                    'education': com['education'], 'financeStage': com['financeStage'], 'firstType': com['firstType'],
+                    'industryField': com['industryField'], 'jobNature': com['jobNature'], 'latitude': com['latitude'],
+                    'longitude': com['longitude'], 'positionAdvantage': com['positionAdvantage'],
+                    'positionId': com['positionId'], 'positionLables': com['positionLables'],
+                    'positionName': com['positionName'], 'salary': com['salary'], 'workYear': com['workYear']}
+            contents.append(item)
+    return contents
+
+
+def parse_to_csv(contents):
+    # head = ['city', 'companyFullName', 'companyLabelList', 'companySize', 'education', 'financeStage',
+    #         'firstType', 'industryField', 'jobNature', 'latitude', 'longitude', 'positionAdvantage',
+    #         'positionId', 'positionLables', 'positionName', 'salary', 'workYear']
+    keys = contents[0].keys()
+    with open('CONTENTS.csv', 'w') as f:
+        dict_writer = csv.DictWriter(f, keys)
+        dict_writer.writeheader()
+        dict_writer.writerows(contents)
 
 
 if __name__ == "__main__":
-    content = get_lagou(1)['content']['positionResult']['result']
-    pprint(content)
-
-
+    parse_to_csv(parse_url())
