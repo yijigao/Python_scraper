@@ -65,7 +65,7 @@ def get_lagou(page):
     }
     return requests.request("POST", url, data=payload, headers=headers, params=querystring).json()
 ```
-2.2 把获取的内容导入到csv
+### 2.2 把获取的内容导入到csv
 ```
 def parse_url():
     contents = []
@@ -139,7 +139,88 @@ with codecs.open('lagou.csv', 'w', encoding="utf8") as f:
 
 
 ## 3. 数据清理&数据分析
+ok, 已经拿到数据了，打开jupyter notebook,准备用pandas来进行数据处理。
+先来看看数据信息
+```
+lg_df = pd.read_csv("lagou.csv")
+lg_df.info()
+>>>
+<class 'pandas.core.frame.DataFrame'>
+RangeIndex: 2505 entries, 0 to 2504
+Data columns (total 17 columns):
+city                 2505 non-null object
+companyFullName      2505 non-null object
+companyLabelList     2505 non-null object
+companySize          2504 non-null object
+education            2505 non-null object
+financeStage         2504 non-null object
+firstType            2505 non-null object
+industryField        2504 non-null object
+jobNature            2505 non-null object
+latitude             2493 non-null float64
+longitude            2493 non-null float64
+positionAdvantage    2505 non-null object
+positionId           2505 non-null int64
+positionLables       2505 non-null object
+positionName         2505 non-null object
+salary               2505 non-null object
+workYear             2505 non-null object
+dtypes: float64(2), int64(1), object(14)
+memory usage: 332.8+ KB
+```
+一共有2505个观测值，这个与我在拉勾网页上得到的内容很相近了
+数据完整新较好，有部分变量有缺失值，但这些变量并不是很重要。
+大概看看数据是啥样的？
+```
+lg_df.head()
+>>> output:
+```
+![此处输入图片的描述][3]
+### 3.1 处理薪资数据
+从上图可以看到，薪资数据显示的是“10k-15k”这样的格式，这是个离散型数据，我需要将其转成连续的数值，这样才能进一步分析
+主要思路，提取出数字，然后取平均值, 使用pandas的apply函数可以处理所有的薪资数据
+```
+# 处理薪资数据，将其转成具体数据取平均
+def parse_salary(salary):
+    if "-" in salary:
+        salary = salary.replace("k", "").replace("K", "")
+    else:
+        salary = salary.split("k")[0]
+    try:
+        min_s = salary.split("-")[0]
+        max_s = salary.split("-")[1]
+        return ((int(min_s) + int(max_s)) * 1000) / 2
+    except IndexError:
+        return int(salary) * 1000
 
+lg_df["salary_sp"] = lg_df["salary"].apply(parse_salary)
+```
+### 3.2 城市 vs 岗位&薪资
+#### 3.2.1 全国数据分析岗位分布
+![此处输入图片的描述][4]
+结果有点出乎意料，在北上广深四个一线城市中，北京的岗位数量远高于其他三个，而我目前所在的成都，岗位数量只有69，与一线城市相距甚远！
+#### 3.2.2 不同城市数据分析薪资分布
+![此处输入图片的描述][5] ![此处输入图片的描述][6]
+从箱线图中可以得出结论：一线城市中北京依旧是工资最高的城市，不过，杭州表现也相当出色，排名第三，而杀入第五的厦门其实没有太大参考性，岗位数量太少。总之，数据分析师在北京、深圳、上海、杭州薪资还是可观的。
 
-  [1]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/1.png
-  [2]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/2.png
+### 3.3 学历 vs 岗位&薪资
+![此处输入图片的描述][7] ![此处输入图片的描述][8]
+绝大多数公司要求本科以上学历，要求硕士甚至博士的公司真的很少，这次爬取的数据中，博士只有一家公司要求。
+薪资方面，当然学历高有优势，但从箱线图来看优势其实不那么明显。
+
+### 3.4 工作年限 vs 岗位&薪资
+![此处输入图片的描述][9] ![此处输入图片的描述][10]
+这里将应届毕业生，小于1年经验，不限经验的岗位合并在一起
+1-3年和3-5年工作经验的数据分析师需求量最大，而不限年限的数据分析师岗位需求量还是有不少的。
+薪资没什么好说的，工作年限越高，工资自然越高。
+
+  [1]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/1.jpg
+  [2]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/2.jpg
+  [3]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/3.jpg
+  [4]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/4.jpg
+  [5]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/5.jpg
+  [6]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/6.jpg
+  [7]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/7.jpg
+  [8]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/8.jpg
+  [9]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/9.jpg
+  [10]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/10.jpg
