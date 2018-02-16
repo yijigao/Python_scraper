@@ -65,7 +65,10 @@ def get_lagou(page):
     }
     return requests.request("POST", url, data=payload, headers=headers, params=querystring).json()
 ```
-### 2.2 把获取的内容导入到csv
+### 2.2 爬取职位的详细信息
+
+
+### 2.3 把获取的内容导入到csv
 ```
 def parse_url():
     contents = []
@@ -168,15 +171,20 @@ workYear             2505 non-null object
 dtypes: float64(2), int64(1), object(14)
 memory usage: 332.8+ KB
 ```
+
 一共有2505个观测值，这个与我在拉勾网页上得到的内容很相近了
 数据完整新较好，有部分变量有缺失值，但这些变量并不是很重要。
 大概看看数据是啥样的？
+
 ```
 lg_df.head()
 >>> output:
 ```
+
 ![此处输入图片的描述][3]
+
 ### 3.1 处理薪资数据
+
 从上图可以看到，薪资数据显示的是“10k-15k”这样的格式，这是个离散型数据，我需要将其转成连续的数值，这样才能进一步分析
 主要思路，提取出数字，然后取平均值, 使用pandas的apply函数可以处理所有的薪资数据
 ```
@@ -195,32 +203,68 @@ def parse_salary(salary):
 
 lg_df["salary_sp"] = lg_df["salary"].apply(parse_salary)
 ```
-### 3.2 城市 vs 岗位&薪资
-#### 3.2.1 全国数据分析岗位分布
+### 3.2 全国数据分析岗位薪资分布
+
 ![此处输入图片的描述][4]
+
+全国数据分析岗位工作主要分布在10k-18k左右
+### 3.3 哪些行业数据分析需求量大
+```
+# 行业分析
+# 公司行业描述一般有两个词语，有的一个词语
+fields = [str(field).replace("、", " ").replace(",", " ").split(" ") for field in lg_df.industryField]
+def count_tags(fields):
+    tags = {}
+    for field in fields:
+        for i in field:
+            if i:
+                if i not in tags:
+                    tags[i] = 1
+                else:
+                    tags[i] += 1
+    return tags
+```
+
+![此处输入图片的描述][5]
+
+移动互联网以37.6%遥遥领先，其次是金融行业
+
+### 3.4 城市 vs 岗位&薪资
+#### 3.4.1 全国数据分析岗位分布
+
+![此处输入图片的描述][6]
+
 结果有点出乎意料，在北上广深四个一线城市中，北京的岗位数量远高于其他三个，而我目前所在的成都，岗位数量只有69，与一线城市相距甚远！
-#### 3.2.2 不同城市数据分析薪资分布
-![此处输入图片的描述][5] ![此处输入图片的描述][6]
+#### 3.4.2 不同城市数据分析薪资分布
+
+![此处输入图片的描述][7] ![此处输入图片的描述][8]
+
 从箱线图中可以得出结论：一线城市中北京依旧是工资最高的城市，不过，杭州表现也相当出色，排名第三，而杀入第五的厦门其实没有太大参考性，岗位数量太少。总之，数据分析师在北京、深圳、上海、杭州薪资还是可观的。
 
-### 3.3 学历 vs 岗位&薪资
-![此处输入图片的描述][7] ![此处输入图片的描述][8]
+### 3.5 学历 vs 岗位&薪资
+![此处输入图片的描述][9] ![此处输入图片的描述][10]
+
 绝大多数公司要求本科以上学历，要求硕士甚至博士的公司真的很少，这次爬取的数据中，博士只有一家公司要求。
 薪资方面，当然学历高有优势，但从箱线图来看优势其实不那么明显。
 
-### 3.4 工作年限 vs 岗位&薪资
-![此处输入图片的描述][9] ![此处输入图片的描述][10]
+### 3.6 工作年限 vs 岗位&薪资
+![此处输入图片的描述][11] ![此处输入图片的描述][12]
+
 这里将应届毕业生，小于1年经验，不限经验的岗位合并在一起
 1-3年和3-5年工作经验的数据分析师需求量最大，而不限年限的数据分析师岗位需求量还是有不少的。
 薪资没什么好说的，工作年限越高，工资自然越高。
 
+### 3.7 数据分析需要哪些技能
+
   [1]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/1.jpg
   [2]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/2.jpg
   [3]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/3.jpg
-  [4]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/4.jpg
-  [5]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/5.jpg
-  [6]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/6.jpg
-  [7]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/7.jpg
-  [8]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/8.jpg
-  [9]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/9.jpg
-  [10]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/10.jpg
+  [4]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/a.jpg
+  [5]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/b.jpg
+  [6]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/4.jpg
+  [7]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/5.jpg
+  [8]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/6.jpg
+  [9]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/7.jpg
+  [10]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/8.jpg
+  [11]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/9.jpg
+  [12]: https://github.com/yijigao/Python_scraper/blob/master/lagou/libs/10.jpg
